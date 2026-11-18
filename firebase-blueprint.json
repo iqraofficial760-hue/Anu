@@ -1,0 +1,245 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "ANU LIVE user profile with role, levels, XP, social counts, and coin balance.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "displayName": { "type": "string" },
+        "bio": { "type": "string" },
+        "role": { "type": "string", "enum": ["user", "host", "moderator", "admin"] },
+        "coinBalance": { "type": "integer" },
+        "roomsHosted": { "type": "integer" },
+        "giftsSent": { "type": "integer" },
+        "giftsReceived": { "type": "integer" },
+        "followersCount": { "type": "integer" },
+        "followingCount": { "type": "integer" },
+        "level": { "type": "integer" },
+        "hostLevel": { "type": "integer" },
+        "xp": { "type": "integer" },
+        "online": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "userId", "displayName", "bio", "role", "coinBalance", "roomsHosted",
+        "giftsSent", "giftsReceived", "followersCount", "followingCount",
+        "level", "hostLevel", "xp", "online", "createdAt", "updatedAt"
+      ]
+    },
+    "RoomBookmark": {
+      "title": "RoomBookmark",
+      "description": "Saved/bookmarked live or party room.",
+      "type": "object",
+      "properties": {
+        "roomId": { "type": "string" },
+        "roomTitle": { "type": "string" },
+        "hostName": { "type": "string" },
+        "category": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["roomId", "roomTitle", "hostName", "category", "createdAt"]
+    },
+    "FollowedHost": {
+      "title": "FollowedHost",
+      "description": "A host followed by the user.",
+      "type": "object",
+      "properties": {
+        "targetUserId": { "type": "string" },
+        "targetName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["targetUserId", "targetName", "createdAt"]
+    },
+    "WalletTransaction": {
+      "title": "WalletTransaction",
+      "description": "Coin recharge or gift transaction record.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "txType": { "type": "string", "enum": ["recharge", "gift_sent", "gift_received", "bonus"] },
+        "amount": { "type": "integer" },
+        "description": { "type": "string" },
+        "counterpartyName": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "txType", "amount", "description", "createdAt"]
+    },
+    "AppNotification": {
+      "title": "AppNotification",
+      "description": "User notification (follower, gift, invite, live started, message, system).",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "notifType": { "type": "string", "enum": ["follower", "gift", "party_invite", "live_started", "message", "system"] },
+        "title": { "type": "string" },
+        "body": { "type": "string" },
+        "read": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "notifType", "title", "body", "read", "createdAt"]
+    },
+    "PartyRoom": {
+      "title": "PartyRoom",
+      "description": "Live streaming or multi-seat (4/6/8) party room.",
+      "type": "object",
+      "properties": {
+        "hostId": { "type": "string" },
+        "hostName": { "type": "string" },
+        "title": { "type": "string" },
+        "topic": { "type": "string" },
+        "category": { "type": "string", "enum": ["popular", "music", "chat", "karaoke", "games", "chill"] },
+        "roomMode": { "type": "string", "enum": ["live", "party"] },
+        "seatCapacity": { "type": "integer" },
+        "shortCode": { "type": "string" },
+        "status": { "type": "string", "enum": ["live", "ended"] },
+        "coverTheme": { "type": "string", "enum": ["music", "lounge", "hero"] },
+        "listenerCount": { "type": "integer" },
+        "giftScore": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": [
+        "hostId", "hostName", "title", "topic", "category", "roomMode", "seatCapacity",
+        "shortCode", "status", "coverTheme", "listenerCount", "giftScore", "createdAt", "updatedAt"
+      ]
+    },
+    "RoomMessage": {
+      "title": "RoomMessage",
+      "description": "Real-time chat message or gift announcement in a live/party room.",
+      "type": "object",
+      "properties": {
+        "roomId": { "type": "string" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "messageType": { "type": "string", "enum": ["chat", "gift", "system"] },
+        "giftName": { "type": "string" },
+        "giftCoins": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["roomId", "senderId", "senderName", "text", "messageType", "createdAt"]
+    },
+    "RoomSeat": {
+      "title": "RoomSeat",
+      "description": "Occupied speaker/video seat (0-7) in a party room.",
+      "type": "object",
+      "properties": {
+        "roomId": { "type": "string" },
+        "seatIndex": { "type": "integer" },
+        "occupantId": { "type": "string" },
+        "occupantName": { "type": "string" },
+        "muted": { "type": "boolean" },
+        "cameraOn": { "type": "boolean" },
+        "seatRole": { "type": "string", "enum": ["host", "moderator", "speaker"] },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["roomId", "seatIndex", "occupantId", "occupantName", "muted", "cameraOn", "seatRole", "updatedAt"]
+    },
+    "MomentPost": {
+      "title": "MomentPost",
+      "description": "Short social photo/video moment post.",
+      "type": "object",
+      "properties": {
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "caption": { "type": "string" },
+        "mediaType": { "type": "string", "enum": ["photo", "video"] },
+        "coverTheme": { "type": "string", "enum": ["music", "lounge", "hero"] },
+        "visibility": { "type": "string", "enum": ["public"] },
+        "likesCount": { "type": "integer" },
+        "commentsCount": { "type": "integer" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["authorId", "authorName", "caption", "mediaType", "coverTheme", "visibility", "likesCount", "commentsCount", "createdAt", "updatedAt"]
+    },
+    "MomentComment": {
+      "title": "MomentComment",
+      "description": "Comment on a Moment post.",
+      "type": "object",
+      "properties": {
+        "momentId": { "type": "string" },
+        "authorId": { "type": "string" },
+        "authorName": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["momentId", "authorId", "authorName", "text", "createdAt"]
+    },
+    "Conversation": {
+      "title": "Conversation",
+      "description": "Private 1-to-1 conversation thread.",
+      "type": "object",
+      "properties": {
+        "participantIds": { "type": "array" },
+        "participantNames": { "type": "array" },
+        "lastMessage": { "type": "string" },
+        "unreadCount": { "type": "integer" },
+        "peerOnline": { "type": "boolean" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["participantIds", "participantNames", "lastMessage", "unreadCount", "peerOnline", "createdAt", "updatedAt"]
+    },
+    "DirectMessage": {
+      "title": "DirectMessage",
+      "description": "Private 1-to-1 chat message.",
+      "type": "object",
+      "properties": {
+        "conversationId": { "type": "string" },
+        "participantIds": { "type": "array" },
+        "senderId": { "type": "string" },
+        "senderName": { "type": "string" },
+        "text": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["conversationId", "participantIds", "senderId", "senderName", "text", "createdAt"]
+    },
+    "ModerationReport": {
+      "title": "ModerationReport",
+      "description": "User or room moderation report.",
+      "type": "object",
+      "properties": {
+        "reporterId": { "type": "string" },
+        "targetId": { "type": "string" },
+        "targetType": { "type": "string", "enum": ["user", "room", "moment"] },
+        "reason": { "type": "string" },
+        "status": { "type": "string", "enum": ["open", "resolved"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["reporterId", "targetId", "targetType", "reason", "status", "createdAt"]
+    },
+    "Room": {
+      "title": "Room",
+      "description": "Standalone owner-scoped Room record.",
+      "type": "object",
+      "properties": {
+        "ownerId": { "type": "string" },
+        "name": { "type": "string" },
+        "activeUsers": { "type": "integer" },
+        "speakers": { "type": "array" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["ownerId", "name", "activeUsers", "speakers", "createdAt", "updatedAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": { "schema": { "$ref": "#/entities/UserProfile" }, "description": "User profiles." },
+    "/users/{userId}/bookmarks/{roomId}": { "schema": { "$ref": "#/entities/RoomBookmark" }, "description": "Saved rooms." },
+    "/users/{userId}/following/{targetUserId}": { "schema": { "$ref": "#/entities/FollowedHost" }, "description": "Followed hosts." },
+    "/users/{userId}/transactions/{txId}": { "schema": { "$ref": "#/entities/WalletTransaction" }, "description": "Wallet & gift transaction history." },
+    "/users/{userId}/notifications/{notifId}": { "schema": { "$ref": "#/entities/AppNotification" }, "description": "In-app notifications." },
+    "/rooms/{roomId}": { "schema": { "$ref": "#/entities/PartyRoom" }, "description": "Live streaming and multi-seat party rooms." },
+    "/rooms/{roomId}/messages/{messageId}": { "schema": { "$ref": "#/entities/RoomMessage" }, "description": "Live room comments & gift announcements." },
+    "/rooms/{roomId}/seats/{seatId}": { "schema": { "$ref": "#/entities/RoomSeat" }, "description": "Party room speaker/video seats." },
+    "/moments/{momentId}": { "schema": { "$ref": "#/entities/MomentPost" }, "description": "Social moments feed." },
+    "/moments/{momentId}/comments/{commentId}": { "schema": { "$ref": "#/entities/MomentComment" }, "description": "Comments on moments." },
+    "/conversations/{conversationId}": { "schema": { "$ref": "#/entities/Conversation" }, "description": "Private 1-to-1 conversations." },
+    "/conversations/{conversationId}/messages/{messageId}": { "schema": { "$ref": "#/entities/DirectMessage" }, "description": "Direct messages." },
+    "/reports/{reportId}": { "schema": { "$ref": "#/entities/ModerationReport" }, "description": "Moderation reports." },
+    "/party_rooms/{roomId}": { "schema": { "$ref": "#/entities/Room" }, "description": "Owner-scoped Room CRUD collection." }
+  }
+}

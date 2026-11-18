@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">ANU LIVE</string>
+    <string name="tagline">Live Streaming &amp; Multi-Seat Social Party</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_in_subtitle">Go live, host 4/6/8-seat voice &amp; video parties, share moments, message friends, and send animated golden gifts.</string>
+    <string name="nav_live">Live</string>
+    <string name="nav_party">Party</string>
+    <string name="nav_moments">Moments</string>
+    <string name="nav_messages">Messages</string>
+    <string name="nav_profile">Me</string>
+    <string name="start_live">Start Live</string>
+    <string name="create_party">Create Party</string>
+    <string name="cancel">Cancel</string>
+    <string name="send_gift">Send Gift</string>
+    <string name="claim_seat">Join Seat</string>
+    <string name="leave_seat">Leave Seat</string>
+    <string name="end_live">End Live</string>
+    <string name="sign_out">Sign Out</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="save_changes">Save Changes</string>
+    <string name="share">Share</string>
+    <string name="report">Report</string>
+    <string name="wallet">Wallet</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="notifications">Notifications</string>
+    <string name="admin_dashboard">Admin Dashboard</string>
+    <string name="vip_store">VIP &amp; SVIP</string>
+    <string name="newcomer_tasks">Newcomer Tasks</string>
+    <string name="settings_title">Settings &amp; Exchange</string>
+    <string name="coins_label">Coins</string>
+    <string name="diamonds_label">Diamonds</string>
+</resources>
