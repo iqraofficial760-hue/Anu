@@ -9,7 +9,7 @@ import com.example.BuildConfig
 object AppInstallerManager {
     private const val PREFS_NAME = "anu_live_installer_prefs"
     private const val KEY_DOWNLOAD_URL = "apk_download_url"
-    const val DEFAULT_PLACEHOLDER_URL = "https://github.com"
+    const val DEFAULT_DOWNLOAD_URL = "https://github.com/iqraofficial760-hue/Anu/releases/latest"
 
     fun getAppVersionLabel(): String = "v${BuildConfig.VERSION_NAME} (Build ${BuildConfig.VERSION_CODE})"
 
@@ -17,7 +17,8 @@ object AppInstallerManager {
 
     fun getSavedDownloadUrl(context: Context): String {
         val prefs = context.applicationContext.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        return prefs.getString(KEY_DOWNLOAD_URL, "").orEmpty()
+        val saved = prefs.getString(KEY_DOWNLOAD_URL, "").orEmpty()
+        return saved.ifBlank { DEFAULT_DOWNLOAD_URL }
     }
 
     fun saveDownloadUrl(context: Context, rawUrl: String) {
