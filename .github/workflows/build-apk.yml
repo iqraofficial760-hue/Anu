@@ -22,6 +22,15 @@ jobs:
           distribution: temurin
           java-version: '21'
 
+      - name: Accept Android SDK Licenses & Install SDK 36.1
+        run: |
+          SDK_ROOT="${ANDROID_HOME:-$ANDROID_SDK_ROOT}"
+          SDKMANAGER="$SDK_ROOT/cmdline-tools/latest/bin/sdkmanager"
+          if [ -x "$SDKMANAGER" ]; then
+            yes | "$SDKMANAGER" --licenses > /dev/null 2>&1 || true
+            "$SDKMANAGER" "platforms;android-36.1" "platform-tools" || true
+          fi
+
       - name: Set up Gradle 9.3.1
         uses: gradle/actions/setup-gradle@v4
         with:
@@ -44,16 +53,21 @@ jobs:
                 -dname "CN=Android Debug,O=Android,C=US"
             fi
           fi
-          if [ ! -f .env ] && [ -f .env.example ]; then
-            cp .env.example .env
+          if [ ! -f .env ]; then
+            if [ -f .env.example ]; then
+              cp .env.example .env
+            else
+              touch .env
+            fi
           fi
 
       - name: Build Debug APK
-        run: gradle :app:assembleDebug --no-daemon
+        run: gradle :app:assembleDebug --no-daemon --no-configuration-cache --stacktrace
 
       - name: Rename APK for Release
         run: |
-          APK_FILE=$(ls app/build/outputs/apk/debug/*.apk | head -n 1)
+          APK_FILE=$(find app/build/outputs/apk/debug -name "*.apk" | head -n 1)
+          echo "Found APK: $APK_FILE"
           cp "$APK_FILE" ANU-LIVE.apk
 
       - name: Upload ANU LIVE APK Artifact
@@ -64,6 +78,7 @@ jobs:
           if-no-files-found: error
 
       - name: Publish GitHub Release (releases/latest)
+        continue-on-error: true
         uses: softprops/action-gh-release@v2
         with:
           tag_name: latest
