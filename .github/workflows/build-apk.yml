@@ -1,12 +1,15 @@
-name: Build ANU LIVE APK
+name: Build & Release ANU LIVE APK
 
 on:
   push:
     branches: [ main, master ]
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
-  build-debug-apk:
+  build-and-release-apk:
     runs-on: ubuntu-latest
 
     steps:
@@ -48,9 +51,27 @@ jobs:
       - name: Build Debug APK
         run: gradle :app:assembleDebug --no-daemon
 
-      - name: Upload ANU LIVE APK
+      - name: Rename APK for Release
+        run: |
+          APK_FILE=$(ls app/build/outputs/apk/debug/*.apk | head -n 1)
+          cp "$APK_FILE" ANU-LIVE.apk
+
+      - name: Upload ANU LIVE APK Artifact
         uses: actions/upload-artifact@v4
         with:
-          name: ANU-LIVE-debug-apk
-          path: app/build/outputs/apk/debug/*.apk
+          name: ANU-LIVE-apk
+          path: ANU-LIVE.apk
           if-no-files-found: error
+
+      - name: Publish GitHub Release (releases/latest)
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: ANU LIVE Latest APK
+          body: |
+            Automatic build of **ANU LIVE** Android APK.
+            Tap **ANU-LIVE.apk** below to download and install on Android.
+          files: ANU-LIVE.apk
+          make_latest: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
