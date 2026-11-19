@@ -372,6 +372,8 @@ fun ProfileScreen(
     val hostedRooms = (hostedRoomsState as? UiState.Success)?.data ?: emptyList()
     var showLionPreview by remember { mutableStateOf(false) }
 
+    var showInstallDialog by remember { mutableStateOf(false) }
+
     val quickAvatarPicker = androidx.activity.compose.rememberLauncherForActivityResult(
         contract = androidx.activity.result.contract.ActivityResultContracts.PickVisualMedia()
     ) { uri ->
@@ -632,6 +634,14 @@ fun ProfileScreen(
                         testTag = "profile_open_settings"
                     )
                     ProfileMenuRow(
+                        icon = Icons.Filled.Star,
+                        title = "Install & Update ANU LIVE (${com.example.data.AppInstallerManager.getAppVersionLabel()})",
+                        subtitle = "Download latest APK update, share installer & check app info",
+                        accent = com.example.ui.components.LuxuryEmeraldGreen,
+                        onClick = { showInstallDialog = true },
+                        testTag = "profile_open_installer"
+                    )
+                    ProfileMenuRow(
                         icon = Icons.Filled.AccountBalanceWallet,
                         title = "Coin Wallet & Recharge",
                         subtitle = "${com.example.data.formatCompactCoins(profile.coinBalance)} coins • History & Recharge",
@@ -759,6 +769,12 @@ fun ProfileScreen(
             subtitle = "${profile.displayName} • ANU LIVE Luxury Aura",
             onDismiss = { showLionPreview = false }
         )
+
+        if (showInstallDialog) {
+            com.example.ui.components.InstallUpdateDialog(
+                onDismiss = { showInstallDialog = false }
+            )
+        }
     }
 }
 
